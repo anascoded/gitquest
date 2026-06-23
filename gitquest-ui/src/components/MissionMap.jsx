@@ -58,7 +58,7 @@ function StarRating({ diff }) {
   )
 }
 
-function MissionPanel({ quest, onClose, onStartLevel }) {
+function MissionPanel({ quest, onClose, onStartLevel, onOpenArsenal, onOpenTrophy }) {
   const completed = quest.levels.filter(l => l.done).length
   const total = quest.levels.length
   const isLocked = quest.locked
@@ -166,7 +166,7 @@ function MissionPanel({ quest, onClose, onStartLevel }) {
   )
 }
 
-export default function MissionMap({ onBack, onStartLevel }) {
+export default function MissionMap({ onBack, onStartLevel, onOpenArsenal, onOpenTrophy }) {
   const [selectedQuest, setSelectedQuest] = useState(null)
 
   const handleQuestClick = (quest) => {
@@ -196,7 +196,11 @@ export default function MissionMap({ onBack, onStartLevel }) {
 
         <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', display: 'flex', flexDirection: 'column', gap: 8 }}>
           {['Intel room', 'Arsenal'].map(label => (
-            <button key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#c8daf0', background: '#0d1526', border: '1px solid #1a2a45', borderRadius: 99, padding: '7px 16px', cursor: 'pointer', fontFamily: 'monospace' }}>
+            <button
+              key={label}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#c8daf0', background: '#0d1526', border: '1px solid #1a2a45', borderRadius: 99, padding: '7px 16px', cursor: 'pointer', fontFamily: 'monospace' }}
+              onClick={() => label === 'Arsenal' ? onOpenArsenal() : onOpenTrophy()}
+            >
               {label === 'Intel room' ? '🏆' : '🔧'} {label}
             </button>
           ))}
@@ -234,7 +238,13 @@ export default function MissionMap({ onBack, onStartLevel }) {
 
         {/* Mission detail overlay */}
         {selectedQuest && (
-          <MissionPanel quest={selectedQuest} onClose={() => setSelectedQuest(null)} onStartLevel={onStartLevel} />
+          <MissionPanel
+            quest={selectedQuest}
+            onClose={() => setSelectedQuest(null)}
+            onStartLevel={onStartLevel}
+            onOpenArsenal={onOpenArsenal}
+            onOpenTrophy={onOpenTrophy}
+          />
         )}
       </div>
     </div>

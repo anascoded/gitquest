@@ -3,6 +3,8 @@ import './App.css'
 import WelcomeScreen from './components/WelcomeScreen'
 import MissionMap from './components/MissionMap'
 import TrainingPage from './components/TrainingPage'
+import Arsenal from './components/Arsenal'
+import TrophyRoom from './components/TrophyRoom'
 
 const GRID_STYLE = {
   backgroundImage:
@@ -34,6 +36,8 @@ export default function App() {
         {screen === 'map' &&
           <MissionMap
             onBack={() => setScreen('welcome')}
+            onOpenArsenal={() => setScreen('arsenal')}
+            onOpenTrophy={() => setScreen('trophy')}
             onStartLevel={(levelId, questId) => {
               setActiveLevel({ levelId, questId })
               setScreen('training')
@@ -45,6 +49,8 @@ export default function App() {
             onBack={() => setScreen('map')}
             onComplete={() => setScreen('map')}
           />)}
+        {screen === 'arsenal' && <Arsenal onBack={() => setScreen('map')} coins={120} />}
+        {screen === 'trophy' && <TrophyRoom onBack={() => setScreen('map')} />}
       </div>
     </>
   )
