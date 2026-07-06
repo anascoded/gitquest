@@ -1,160 +1,6 @@
 import { useState } from 'react'
-
-const TRAINING_DATA = {
-  'git add': {
-    title: 'git add',
-    subtitle: 'Stage your changes for the next commit',
-    briefing: `Intelligence has picked up modified files in your local repo. Before you can commit evidence to the secure log, you need to stage the files — telling Git exactly what to include. This is your "load the weapon before firing" step.`,
-    sections: [
-      {
-        heading: 'What it does',
-        body: `git add moves changes from your working directory into the staging area. Think of the staging area as a holding zone — nothing gets committed until you explicitly add it first.`,
-      },
-      {
-        heading: 'Basic syntax',
-        blocks: [
-          { code: 'git add <filename>', desc: 'Stage a single file' },
-          { code: 'git add .', desc: 'Stage everything in the current directory' },
-          { code: 'git add -p', desc: 'Interactively choose which changes to stage (chunk by chunk)' },
-        ],
-      },
-      {
-        heading: 'Example',
-        terminal: [
-          { prompt: '$', cmd: 'git status', comment: '# see what changed' },
-          { output: 'modified:   mission_log.txt\nuntracked:  payload.sh' },
-          { prompt: '$', cmd: 'git add mission_log.txt' },
-          { prompt: '$', cmd: 'git status', comment: '# check again' },
-          { output: 'Changes to be committed:\n  modified: mission_log.txt' },
-        ],
-      },
-      {
-        heading: 'Watch out for',
-        warnings: [
-          'git add . stages everything including files you might not want committed — always check git status first.',
-          'Adding a file doesn\'t save it permanently — you still need git commit after.',
-        ],
-      },
-    ],
-    battle: {
-      scenario: `ALERT: Shadow Breach operatives have modified two critical files — "firewall_config.txt" and "access_log.txt" — with false data. You've corrected both files locally. Your handler says: "Stage only the firewall config for now. Don't touch the access log yet."`,
-      expected: 'git add firewall_config.txt',
-      hint: 'Stage a single specific file, not everything.',
-    },
-  },
-  'git commit -m': {
-    title: 'git commit -m',
-    subtitle: 'Lock in your staged changes with a message',
-    briefing: `Staging was just the prep work. Now you need to permanently record your changes into the mission log. A commit is a snapshot — every commit is traceable, timestamped, and signed.`,
-    sections: [
-      {
-        heading: 'What it does',
-        body: `git commit saves everything in the staging area as a permanent snapshot in your repo's history. The -m flag lets you write the commit message inline instead of opening an editor.`,
-      },
-      {
-        heading: 'Basic syntax',
-        blocks: [
-          { code: 'git commit -m "your message"', desc: 'Commit with an inline message' },
-          { code: 'git commit -am "message"', desc: 'Stage all tracked files and commit in one step' },
-        ],
-      },
-      {
-        heading: 'Example',
-        terminal: [
-          { prompt: '$', cmd: 'git commit -m "fix: patch firewall rule 42"' },
-          { output: '[main 4f3a1c2] fix: patch firewall rule 42\n 1 file changed, 3 insertions(+), 1 deletion(-)' },
-        ],
-      },
-      {
-        heading: 'Watch out for',
-        warnings: [
-          'If the staging area is empty, git commit does nothing — make sure you\'ve run git add first.',
-          'Write meaningful messages. "fix stuff" is useless in a 6-month-old repo.',
-        ],
-      },
-    ],
-    battle: {
-      scenario: `ALERT: You've staged the corrected firewall config. Your handler radios in: "Commit it now. Message should say exactly: 'fix: restored firewall_config to secure state'"`,
-      expected: 'git commit -m "fix: restored firewall_config to secure state"',
-      hint: 'Use the -m flag and match the message exactly.',
-    },
-  },
-  'git commit --amend': {
-    title: 'git commit --amend',
-    subtitle: 'Fix your last commit before it\'s too late',
-    briefing: `You submitted a mission report with a typo in the title. Before it gets pushed to headquarters, you can silently correct it. Amend rewrites the last commit — same changes, new message, new identity.`,
-    sections: [
-      {
-        heading: 'What it does',
-        body: `git commit --amend replaces the most recent commit with a new one. You can change the message, add forgotten files, or both. It rewrites history — only safe before you've pushed.`,
-      },
-      {
-        heading: 'Basic syntax',
-        blocks: [
-          { code: 'git commit --amend -m "new message"', desc: 'Change the last commit message' },
-          { code: 'git add forgotten.txt\ngit commit --amend --no-edit', desc: 'Add a forgotten file without changing the message' },
-        ],
-      },
-      {
-        heading: 'Example',
-        terminal: [
-          { prompt: '$', cmd: 'git commit -m "fxi: firewall patch"', comment: '# typo!' },
-          { output: '[main 9a2b3c1] fxi: firewall patch' },
-          { prompt: '$', cmd: 'git commit --amend -m "fix: firewall patch"' },
-          { output: '[main 7d4e8f2] fix: firewall patch' },
-        ],
-      },
-      {
-        heading: 'Watch out for',
-        warnings: [
-          'Never amend a commit that\'s already been pushed — it rewrites history and will conflict with teammates.',
-          '--amend creates a brand new commit hash. The old one is gone.',
-        ],
-      },
-    ],
-    battle: {
-      scenario: `ALERT: Your last commit message reads "updte access controls" — a typo that will flag an audit. Fix it before it reaches HQ. The correct message should be: "update access controls"`,
-      expected: 'git commit --amend -m "update access controls"',
-      hint: 'Rewrite the last commit message using --amend.',
-    },
-  },
-  'staging vs. commit': {
-    title: 'Staging vs. commit',
-    subtitle: 'Two steps, two purposes',
-    briefing: `New recruits often confuse staging and committing. They're not the same step. Understanding the difference is the difference between a sloppy agent and a clean one.`,
-    sections: [
-      {
-        heading: 'The two zones',
-        body: `Your working directory is where you edit files freely. The staging area is where you deliberately select what goes into the next snapshot. The commit is the snapshot itself — permanent and traceable.`,
-      },
-      {
-        heading: 'The flow',
-        blocks: [
-          { code: 'edit file → git add → git commit', desc: 'The three-step cycle every change goes through' },
-        ],
-      },
-      {
-        heading: 'Side by side',
-        comparison: [
-          { label: 'git add', point: 'Moves changes to staging. Nothing is saved permanently yet.' },
-          { label: 'git commit', point: 'Saves the staged snapshot forever in repo history.' },
-        ],
-      },
-      {
-        heading: 'Watch out for',
-        warnings: [
-          'git commit alone won\'t pick up new/untracked files — you must git add them first.',
-          'You can stage multiple times before committing — useful for grouping related changes.',
-        ],
-      },
-    ],
-    battle: {
-      scenario: `ALERT: A trainee just ran git commit without staging anything first and got an error. Your handler asks: "What's the correct two-command sequence to stage all changes in the current directory and then commit with the message 'chore: sync mission files'?" Enter both commands separated by && `,
-      expected: 'git add . && git commit -m "chore: sync mission files"',
-      hint: 'Stage everything first, then commit with the right message.',
-    },
-  },
-}
+import { MISSIONS } from '../missions/Missions'
+import { useProgress } from '../context/ProgressContext'
 
 function TerminalBlock({ lines }) {
   return (
@@ -190,7 +36,9 @@ function BattleSection({ battle, onComplete }) {
     setCorrect(isCorrect)
     setSubmitted(true)
     setAttempts(a => a + 1)
-    if (isCorrect) setTimeout(() => onComplete(), 1200)
+    if (isCorrect) {
+      setTimeout(() => onComplete(), 1200)
+    }
   }
 
   const handleKeyDown = (e) => {
@@ -263,7 +111,8 @@ function BattleSection({ battle, onComplete }) {
 }
 
 export default function TrainingPage({ levelId, questId, onBack, onComplete }) {
-  const data = TRAINING_DATA[levelId]
+  const { completeLevel } = useProgress();
+  const data = MISSIONS[questId].levels[levelId];
   const [battleDone, setBattleDone] = useState(false)
   const [skippedToBottom, setSkippedToBottom] = useState(false)
 
@@ -379,7 +228,11 @@ export default function TrainingPage({ levelId, questId, onBack, onComplete }) {
             </button>
           </div>
         ) : (
-          <BattleSection battle={data.battle} onComplete={() => setBattleDone(true)} />
+          <BattleSection levelId={levelId} battle={data.battle} onComplete={() => {
+            completeLevel(levelId);
+            setBattleDone(true)
+          }}
+          />
         )}
 
         <div style={{ height: '3rem' }} />

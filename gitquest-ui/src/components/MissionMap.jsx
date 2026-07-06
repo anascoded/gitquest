@@ -1,39 +1,6 @@
 import { useState } from 'react'
-
-const QUESTS = [
-  {
-    id: 'M1', x: 60, y: 138, done: true,
-    title: 'Mission 1 — First Contact',
-    levels: [
-      { id: 'L1', cmd: 'git init', diff: 'easy', done: true },
-      { id: 'L2', cmd: 'git clone', diff: 'easy', done: true },
-      { id: 'L3', cmd: 'git remote', diff: 'med', done: true },
-    ]
-  },
-  {
-    id: 'M2', x: 150, y: 88, done: true,
-    title: 'Mission 2 — Recon',
-    levels: [
-      { id: 'L1', cmd: 'git status', diff: 'easy', done: true },
-      { id: 'L2', cmd: 'git log', diff: 'easy', done: true },
-      { id: 'L3', cmd: 'git diff', diff: 'med', done: true },
-      { id: 'L4', cmd: 'git show', diff: 'med', done: true },
-    ]
-  },
-  {
-    id: 'M3', x: 240, y: 138, active: true,
-    title: 'Mission 3 — Saving Your Work',
-    levels: [
-      { id: 'L1', cmd: 'git add', diff: 'easy', done: false },
-      { id: 'L2', cmd: 'git commit -m', diff: 'easy', done: false },
-      { id: 'L3', cmd: 'git commit --amend', diff: 'med', done: false },
-      { id: 'L4', cmd: 'staging vs. commit', diff: 'med', done: false },
-    ]
-  },
-  { id: 'M4', x: 330, y: 88, locked: true, title: 'Mission 4 — Branching Out', levels: [] },
-  { id: 'M5', x: 330, y: 178, locked: true, title: 'Mission 5 — Merge Conflict', levels: [] },
-  { id: 'M6', x: 410, y: 58, locked: true, title: 'Mission 6 — Shadow Breach', levels: [] },
-]
+import { MISSIONS } from '../missions/Missions'
+import { useProgress } from '../context/ProgressContext'
 
 const LINES = [
   [80, 160, 170, 110], [170, 110, 260, 160], [260, 160, 350, 110],
@@ -59,9 +26,11 @@ function StarRating({ diff }) {
 }
 
 function MissionPanel({ quest, onClose, onStartLevel, onOpenArsenal, onOpenTrophy }) {
-  const completed = quest.levels.filter(l => l.done).length
-  const total = quest.levels.length
+  const { isLevelComplete } = useProgress();
+  const completed = Object.values(quest.levels).filter(l => isLevelComplete(l.id)).length
+  const total = Object.values(quest.levels).length
   const isLocked = quest.locked
+  const nextLevelId = Object.values(quest.levels).find(l => !isLevelComplete(l.id))?.id // this is not guaranteeed to work so prob need to fix
 
   return (
     <div style={{
@@ -103,24 +72,28 @@ function MissionPanel({ quest, onClose, onStartLevel, onOpenArsenal, onOpenTroph
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1.5rem' }}>
 
-            {quest.levels.map(level => (
-              <div key={level.id} style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                background: level.done ? '#0d1f15' : '#080c17',
-                border: `1px solid ${level.done ? '#00ff8833' : '#1a2a45'}`,
-                borderRadius: 8, padding: '10px 14px',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ fontSize: 12, color: level.done ? '#00ff88' : '#2a3a55', fontFamily: 'monospace', minWidth: 16 }}>
-                    {level.done ? '✓' : '○'}
-                  </span>
-                  <span style={{ fontSize: 13, color: level.done ? '#00cc66' : '#c8daf0', fontFamily: 'monospace' }}>
-                    {level.id} — {level.cmd}
-                  </span>
+            {Object.values(quest.levels).map(level => {
+              const levelIsDone = isLevelComplete(level.id);
+
+              return (
+                <div key={level.id} style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  background: levelIsDone ? '#0d1f15' : '#080c17',
+                  border: `1px solid ${levelIsDone ? '#00ff8833' : '#1a2a45'}`,
+                  borderRadius: 8, padding: '10px 14px',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 12, color: levelIsDone ? '#00ff88' : '#2a3a55', fontFamily: 'monospace', minWidth: 16 }}>
+                      {levelIsDone ? '✓' : '○'}
+                    </span>
+                    <span style={{ fontSize: 13, color: levelIsDone ? '#00cc66' : '#c8daf0', fontFamily: 'monospace' }}>
+                      {level.id} — {level.cmd}
+                    </span>
+                  </div>
+                  <StarRating diff={level.diff} />
                 </div>
-                <StarRating diff={level.diff} />
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
 
@@ -134,7 +107,9 @@ function MissionPanel({ quest, onClose, onStartLevel, onOpenArsenal, onOpenTroph
             borderRadius: 8, padding: '10px 20px', cursor: isLocked ? 'not-allowed' : 'pointer',
             fontFamily: 'monospace', fontSize: 13, fontWeight: 500,
           }}
-            onClick={() => onStartLevel(quest.levels[0]?.cmd)}
+            onClick={() => {
+              onStartLevel(nextLevelId, quest.id)
+            }}
             disabled={isLocked}
           >
             ▶ {isLocked ? 'Locked' : 'Start'}
@@ -162,11 +137,12 @@ function MissionPanel({ quest, onClose, onStartLevel, onOpenArsenal, onOpenTroph
           )}
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 
 export default function MissionMap({ onBack, onStartLevel, onOpenArsenal, onOpenTrophy }) {
+  const { isLevelComplete } = useProgress();
   const [selectedQuest, setSelectedQuest] = useState(null)
 
   const handleQuestClick = (quest) => {
@@ -214,26 +190,31 @@ export default function MissionMap({ onBack, onStartLevel, onOpenArsenal, onOpen
             <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
               stroke={i < 2 ? '#1a3a2a' : '#1a2a45'} strokeWidth="1.5" strokeDasharray="5,4" />
           ))}
-          {QUESTS.map(q => (
-            <g key={q.id} onClick={() => handleQuestClick(q)}
-              style={{ cursor: q.locked ? 'not-allowed' : 'pointer' }}>
-              <rect x={q.x} y={q.y} width="40" height="40" rx="6"
-                fill={q.active ? '#003322' : q.done ? '#0d1f15' : '#0d1526'}
-                stroke={q.active ? '#00ff88' : q.done ? '#00ff8844' : '#1a2a45'}
-                strokeWidth={q.active ? 1.5 : 1}
-              />
-              <text x={q.x + 20} y={q.y + 25} textAnchor="middle" fontSize="13"
-                fill={q.active ? '#00ff88' : q.done ? '#00ff88' : '#1a2a45'}
-                fontFamily="monospace">
-                {q.active ? '◎' : q.done ? '✓' : '⬡'}
-              </text>
-              <text x={q.x + 20} y={q.y + 54} textAnchor="middle" fontSize="10"
-                fill={q.active ? '#00cc66' : q.done ? '#00ff8877' : '#2a3a55'}
-                fontFamily="monospace">
-                {q.id}
-              </text>
-            </g>
-          ))}
+          {Object.values(MISSIONS).map(q => {
+            const levelCount = Object.values(q.levels).length;
+            const doneCount = Object.values(q.levels).filter(l => isLevelComplete(l.id)).length;
+            const missionDone = doneCount === levelCount;
+            return (
+              <g key={q.id} onClick={() => handleQuestClick(q)}
+                style={{ cursor: q.locked ? 'not-allowed' : 'pointer' }}>
+                <rect x={q.x} y={q.y} width="40" height="40" rx="6"
+                  fill={q.active ? '#003322' : missionDone ? '#0d1f15' : '#0d1526'}
+                  stroke={q.active ? '#00ff88' : missionDone ? '#00ff8844' : '#1a2a45'}
+                  strokeWidth={q.active ? 1.5 : 1}
+                />
+                <text x={q.x + 20} y={q.y + 25} textAnchor="middle" fontSize="13"
+                  fill={q.active ? '#00ff88' : missionDone ? '#00ff88' : '#1a2a45'}
+                  fontFamily="monospace">
+                  {q.active ? '◎' : missionDone ? '✓' : '⬡'}
+                </text>
+                <text x={q.x + 20} y={q.y + 54} textAnchor="middle" fontSize="10"
+                  fill={q.active ? '#00cc66' : missionDone ? '#00ff8877' : '#2a3a55'}
+                  fontFamily="monospace">
+                  {q.id}
+                </text>
+              </g>
+            )
+          })}
         </svg>
 
         {/* Mission detail overlay */}

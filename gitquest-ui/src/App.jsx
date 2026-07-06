@@ -5,6 +5,7 @@ import MissionMap from './components/MissionMap'
 import TrainingPage from './components/TrainingPage'
 import Arsenal from './components/Arsenal'
 import TrophyRoom from './components/TrophyRoom'
+import { ProgressProvider } from './context/ProgressContext'
 
 const GRID_STYLE = {
   backgroundImage:
@@ -17,7 +18,7 @@ export default function App() {
   const [activeLevel, setActiveLevel] = useState(null)   // { levelId, questId }
 
   return (
-    <>
+    <ProgressProvider>
       <style>{`
         @keyframes sb-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         body { margin: 0; background: #0a0e1a; }
@@ -52,6 +53,6 @@ export default function App() {
         {screen === 'arsenal' && <Arsenal onBack={() => setScreen('map')} coins={120} />}
         {screen === 'trophy' && <TrophyRoom onBack={() => setScreen('map')} />}
       </div>
-    </>
+    </ProgressProvider>
   )
 }
