@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import WelcomeScreen from './components/WelcomeScreen'
 import MissionMap from './components/MissionMap'
@@ -7,7 +7,7 @@ import Arsenal from './components/Arsenal'
 import TrophyRoom from './components/TrophyRoom'
 import SignInPage from './components/SignInPage'
 import SignUpPage from './components/SignUpPage'
-import { ProgressProvider } from './context/ProgressContext'
+import { ProgressProvider, useProgress } from './context/ProgressContext'
 
 const GRID_STYLE = {
     backgroundImage:
@@ -15,48 +15,114 @@ const GRID_STYLE = {
     backgroundSize: '40px 40px',
 }
 
-export default function App() {
-    const [screen, setScreen] = useState('signin')         // 'signin' | 'signup' | 'welcome' | 'map' | 'training' | 'arsenal' | 'trophy'
-    const [activeLevel, setActiveLevel] = useState(null)   // { levelId, questId }
+const AUDIO_URL = 'http://localhost:5001/audio/Trent Reznor - Intriguing Possibilities.wav'
 
+function AppInner() {
+    const { progress }                  = useProgress()
+    const [screen, setScreen]           = useState('signin')
+    const [activeLevel, setActiveLevel] = useState(null)
+    const [agent, setAgent]             = useState(null)
+    const [soundOn, setSoundOn]         = useState(true)
+    const audioRef                      = useRef(null)
+
+    // Initialize audio once
+    useEffect(() => {
+        const audio       = new Audio(AUDIO_URL)
+        audio.loop        = true
+        audio.volume      = 0.5
+        audioRef.current  = audio
+        return () => { audio.pause(); audio.src = '' }
+    }, [])
+
+    // Play only on map screen, respect soundOn toggle
+    useEffect(() => {
+        const audio = audioRef.current
+        if (!audio) return
+        const shouldPlay = !['signin', 'signup', 'welcome'].includes(screen)
+        if (shouldPlay && soundOn) {
+            audio.play().catch(() => {})
+        } else {
+            audio.pause()
+        }
+    }, [screen, soundOn])
+
+    function handleSignIn(agentData) { setAgent(agentData); setScreen('welcome') }
+    function handleSignUp(agentData) { setAgent(agentData); setScreen('welcome') }
+
+    function toggleSound() {
+        setSoundOn(prev => !prev)
+    }
+
+    return (
+        <div style={{ background: '#0a0e1a', minHeight: '100vh', width: '100%', position: 'relative', fontFamily: 'monospace' }}>
+            <div style={{ position: 'fixed', inset: 0, ...GRID_STYLE, pointerEvents: 'none' }} />
+
+            {/* Sound button */}
+            {screen !== 'signin' && screen !== 'signup' && screen !== 'welcome' && (
+                <button
+                    onClick={toggleSound}
+                    style={{ position: 'fixed', top: '1rem', right: '1rem', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: soundOn ? '#00ff88' : '#4a6fa5', background: '#0d1526', border: `1px solid ${soundOn ? '#00ff8844' : '#1a2a45'}`, borderRadius: 99, padding: '6px 14px', cursor: 'pointer', zIndex: 100, fontFamily: 'monospace' }}
+                >
+                    {soundOn ? '🔊 Sound on' : '🔇 Sound off'}
+                </button>
+            )}
+
+            {/* Agent badge */}
+            {agent && screen !== 'signin' && screen !== 'signup' && (
+                <div style={{ position: 'fixed', top: '1rem', left: '1rem', display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: '#00ff88', background: '#0d1526', border: '1px solid #00ff8844', borderRadius: 99, padding: '6px 14px', zIndex: 100, fontFamily: 'monospace' }}>
+                    ◈ {agent.codename}
+                    <span style={{ color: '#4a6fa5' }}>·</span>
+                    <span style={{ color: '#ffb700' }}>💰 {progress.coins ?? 0}</span>
+                </div>
+            )}
+
+            {screen === 'signin'  && <SignInPage  onSignIn={handleSignIn}  onGoToSignUp={() => setScreen('signup')} />}
+            {screen === 'signup'  && <SignUpPage  onSignUp={handleSignUp}  onGoToSignIn={() => setScreen('signin')} />}
+            {screen === 'welcome' && <WelcomeScreen onSelect={() => setScreen('map')} />}
+
+            {screen === 'map' && (
+                <MissionMap
+                    agent={agent}
+                    onBack={() => setScreen('welcome')}
+                    onOpenArsenal={() => setScreen('arsenal')}
+                    onOpenTrophy={() => setScreen('trophy')}
+                    onStartLevel={(missionId, levelId, allMissions) => {
+                        setActiveLevel({ missionId, levelId, allMissions })
+                        setScreen('training')
+                    }}
+                />
+            )}
+
+            {screen === 'training' && activeLevel && (
+                <TrainingPage
+                    missionId={activeLevel.missionId}
+                    levelId={activeLevel.levelId}
+                    allMissions={activeLevel.allMissions}
+                    onBack={() => setScreen('map')}
+                    onComplete={(nextMissionId, nextLevelId, allMissions) => {
+                        if (nextMissionId) {
+                            setActiveLevel({ missionId: nextMissionId, levelId: nextLevelId, allMissions })
+                        } else {
+                            setScreen('map')
+                        }
+                    }}
+                />
+            )}
+
+            {screen === 'arsenal' && <Arsenal    onBack={() => setScreen('map')} coins={progress.coins ?? 0} />}
+            {screen === 'trophy'  && <TrophyRoom onBack={() => setScreen('map')} />}
+        </div>
+    )
+}
+
+export default function App() {
     return (
         <ProgressProvider>
             <style>{`
         @keyframes sb-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         body { margin: 0; background: #0a0e1a; }
       `}</style>
-
-            <div style={{ background: '#0a0e1a', minHeight: '100vh', width: '100%', position: 'relative', fontFamily: 'monospace' }}>
-                <div style={{ position: 'fixed', inset: 0, ...GRID_STYLE, pointerEvents: 'none' }} />
-
-                <button
-                    style={{ position: 'fixed', top: '1rem', right: '1rem', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#4a6fa5', background: '#0d1526', border: '1px solid #1a2a45', borderRadius: 99, padding: '6px 14px', cursor: 'pointer', zIndex: 100, fontFamily: 'monospace' }}
-                >
-                    🔊 sound on
-                </button>
-
-                {screen === 'signin' && <SignInPage onSignIn={() => setScreen('welcome')} onGoToSignUp={() => setScreen('signup')} />}
-                {screen === 'signup' && <SignUpPage onSignUp={() => setScreen('welcome')} onGoToSignIn={() => setScreen('signin')} />}
-                {screen === 'welcome' && <WelcomeScreen onSelect={() => setScreen('map')} />}
-                {screen === 'map' &&
-                    <MissionMap
-                        onBack={() => setScreen('welcome')}
-                        onOpenArsenal={() => setScreen('arsenal')}
-                        onOpenTrophy={() => setScreen('trophy')}
-                        onStartLevel={(levelId, questId) => {
-                            setActiveLevel({ levelId, questId })
-                            setScreen('training')
-                        }} />}
-                {screen === 'training' && activeLevel && (
-                    <TrainingPage
-                        levelId={activeLevel.levelId}
-                        questId={activeLevel.questId}
-                        onBack={() => setScreen('map')}
-                        onComplete={() => setScreen('map')}
-                    />)}
-                {screen === 'arsenal' && <Arsenal onBack={() => setScreen('map')} coins={120} />}
-                {screen === 'trophy' && <TrophyRoom onBack={() => setScreen('map')} />}
-            </div>
+            <AppInner />
         </ProgressProvider>
     )
 }

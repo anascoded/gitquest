@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { signIn } from '../../api/auth.js'
 
 function PulseDot() {
   return (
@@ -60,17 +61,20 @@ function SignInPage({ onSignIn, onGoToSignUp }) {
     return e
   }
 
-  function handleSubmit(ev) {
-    ev.preventDefault()
-    const e = validate()
-    if (Object.keys(e).length) { setErrors(e); return }
-    setErrors({})
-    setLoading(true)
-    // Simulate auth delay — replace with real API call
-    setTimeout(() => {
-      setLoading(false)
-      onSignIn({ email })
-    }, 800)
+  async function handleSubmit(ev) {
+      ev.preventDefault()
+      const e = validate()
+      if (Object.keys(e).length) { setErrors(e); return }
+      setErrors({})
+      setLoading(true)
+      try {
+          const agent = await signIn(email, password)
+          onSignIn(agent)
+      } catch (err) {
+          setErrors({ api: err.message })
+      } finally {
+          setLoading(false)
+      }
   }
 
   return (
@@ -122,6 +126,17 @@ function SignInPage({ onSignIn, onGoToSignUp }) {
             placeholder="••••••••"
             error={errors.password}
           />
+
+            {errors.api && (
+                <div style={{
+                    fontSize: 12, color: '#e24b4a',
+                    background: '#e24b4a11', border: '1px solid #e24b4a44',
+                    borderRadius: 6, padding: '8px 12px', marginBottom: 12,
+                    letterSpacing: '0.05em',
+                }}>
+                    ✘ {errors.api}
+                </div>
+            )}
 
           <button
             type="submit"

@@ -26,6 +26,18 @@ export function ProgressProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
   }, [progress]);
 
+  /**
+   *
+   * @param amount
+   */
+  function addCoins(amount) {
+    setProgress(prev => ({ ...prev, coins: (prev.coins ?? 0) + amount }))
+  }
+
+  /**
+   *
+   * @param levelId
+   */
   function completeLevel(levelId) {
     setProgress(prev =>
       prev.completedLevels.includes(levelId)
@@ -83,6 +95,7 @@ export function ProgressProvider({ children }) {
     progress,
     completeLevel,
     isLevelComplete,
+    addCoins,
     setCurrent,
     setMode,
     resetProgress,

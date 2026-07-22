@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6df4f9d3-921e-4ee7-9db5-6e56bda30da6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/middleware/auth.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/models/Agent.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/models/AgentArsenal.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/models/Arsenal.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/models/Battle.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/models/Command.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/models/Level.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/models/Mission.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/agents.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/arsenal.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/auth.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/battles.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/levels.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/missions.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/seed.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gitquest-ui/api/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/components/MissionMap.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/components/MissionMap.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/components/SignInPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/components/SignInPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/components/SignUpPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/components/SignUpPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/components/TrainingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/components/TrainingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/context/ProgressContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/context/ProgressContext.jsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;anascoded&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/anascoded/gitquest&quot;,
+    &quot;accountId&quot;: &quot;46ee4be1-73e0-4dc2-8812-940409ede096&quot;
+  }
+}</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.000000290409025" />
+      <entry key="S5" value="1.003567746390881" />
+      <entry key="S10" value="1.084012658618982" />
+      <entry key="S30" value="1.6943946671570158" />
+      <entry key="S60" value="2.1821038468554654" />
+      <entry key="M2" value="2.651123526912248" />
+      <entry key="M5" value="3.7478949771468804" />
+      <entry key="M10" value="4.835996696368797" />
+      <entry key="M15" value="5.396393126715011" />
+      <entry key="M30" value="6.107968732124489" />
+      <entry key="H1" value="7.477342512079436" />
+      <entry key="H2" value="24.31396055198691" />
+      <entry key="H4" value="85.25641122440926" />
+      <entry key="D1" value="283.92243514907955" />
+      <entry key="W1" value="351.2693448990407" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="2.960772635496185E-234" />
+      <entry key="S60" value="2.7882821899944462E-117" />
+      <entry key="M2" value="8.944697799046073E-59" />
+      <entry key="M5" value="1.1635443544495387E-23" />
+      <entry key="M10" value="6.094163383348989E-12" />
+      <entry key="M15" value="5.0584256522634867E-8" />
+      <entry key="M30" value="4.508449227744483E-4" />
+      <entry key="H1" value="0.048106323402142964" />
+      <entry key="H2" value="0.5475531398687259" />
+      <entry key="H4" value="1.9247013211195918" />
+      <entry key="D1" value="5.630409561368753" />
+      <entry key="W1" value="6.785189671817291" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.6830201283771977" />
+      <entry key="MS500" value="0.9265880618903709" />
+      <entry key="S2" value="0.981119263791017" />
+      <entry key="S5" value="0.9959633504052723" />
+      <entry key="S10" value="1.0801006971252722" />
+      <entry key="S30" value="1.692823308726048" />
+      <entry key="S60" value="2.181208961054323" />
+      <entry key="M2" value="2.650593869601327" />
+      <entry key="M5" value="3.747522779081448" />
+      <entry key="M10" value="4.835711307152864" />
+      <entry key="M15" value="5.396166575357263" />
+      <entry key="M30" value="6.108281855063648" />
+      <entry key="H1" value="7.525335087525551" />
+      <entry key="H2" value="24.861264071737537" />
+      <entry key="H4" value="87.18073009629526" />
+      <entry key="D1" value="289.5526675258308" />
+      <entry key="W1" value="358.05450424991756" />
+    </decayedShown>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3Ggd8v9T3YYJfEusl8hBG68l10U" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ruby.rubocop.migration.global.runOnSaveToExternalFormatter&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/agent-auth&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/anas/Workspace/Projects/gitquest-main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.web.browsers&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RubyModuleManagerSettings">
+    <option name="blackListedRootsPaths">
+      <list>
+        <option value="$PROJECT_DIR$" />
+      </list>
+    </option>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-63390994e64e-intellij.indexing.shared.core-IU-262.8665.258" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6df4f9d3-921e-4ee7-9db5-6e56bda30da6" name="Changes" comment="" />
+      <created>1784396990192</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1784396990192</updated>
+      <workItem from="1784396991578" duration="5327000" />
+      <workItem from="1784432277934" duration="701000" />
+      <workItem from="1784604181865" duration="1570000" />
+      <workItem from="1784613234556" duration="6078000" />
+      <workItem from="1784644099365" duration="10901000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

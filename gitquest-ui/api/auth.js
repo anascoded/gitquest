@@ -1,0 +1,41 @@
+const BASE_URL = 'http://localhost:5001/api'
+
+export async function signIn(email, password) {
+    const res = await fetch(`${BASE_URL}/auth/signin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',          // sends/receives HTTP-only cookie
+        body: JSON.stringify({ email, password }),
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'Sign in failed')
+    return data.agent
+}
+
+export async function signUp(codename, email, password) {
+    const res = await fetch(`${BASE_URL}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ codename, email, password }),
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'Sign up failed')
+    return data.agent
+}
+
+export async function signOut() {
+    await fetch(`${BASE_URL}/auth/signout`, {
+        method: 'POST',
+        credentials: 'include',
+    })
+}
+
+export async function getMe() {
+    const res = await fetch(`${BASE_URL}/auth/me`, {
+        credentials: 'include',
+    })
+    if (!res.ok) return null
+    const data = await res.json()
+    return data.agent
+}
