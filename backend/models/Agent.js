@@ -14,7 +14,7 @@ const agentSchema = new mongoose.Schema({
     totalMissions:  { type: Number, default: 0 },
     totalXP:        { type: Number, default: 0, min: 0 },
     rank:           { type: String, default: 'Recruit',
-        enum: ['Recruit','Field Agent','Senior Agent','Ghost','Director'] },
+        enum: ['Recruit','Field Agent'] },
 }, { timestamps: true });
 
 export default mongoose.model('Agent', agentSchema);

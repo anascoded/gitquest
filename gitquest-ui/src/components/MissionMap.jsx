@@ -79,17 +79,19 @@ function MissionPanel({ level, missions, onClose, onStartLevel }) {
             {missions.map((mission, idx) => {
               const done   = isLevelComplete(mission._id)
               const isNext = nextMission?._id === mission._id
-              const locked = idx > 0 && !isLevelComplete(missions[idx - 1]._id)
+              const locked = idx > 0 && !isLevelComplete(missions[idx - 1]._id) && !done
               return (
                   <div
                       key={mission._id}
-                      onClick={() => { if (!done && !locked) onStartLevel(mission._id, level._id, missions) }}
+                      onClick={() => {
+                        if (!locked) onStartLevel(mission._id, level._id, missions)
+                      }}
                       style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                         background: done ? '#0d1f15' : isNext ? '#03150d' : '#080c17',
                         border: `1px solid ${done ? color + '44' : isNext ? color + '66' : '#1a2a45'}`,
                         borderRadius: 8, padding: '10px 14px',
-                        cursor: done || locked ? 'default' : 'pointer',
+                        cursor: locked ? 'not-allowed' : 'pointer',
                         opacity: locked ? 0.4 : 1,
                         transition: 'opacity 0.2s',
                       }}

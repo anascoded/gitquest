@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const arsenalSchema = new mongoose.Schema({
+const collectibleSchema = new mongoose.Schema({
     name:        { type: String, required: true, unique: true },
     description: { type: String, required: true },
     type:        { type: String, required: true,
@@ -11,4 +11,4 @@ const arsenalSchema = new mongoose.Schema({
     effect:      { type: String, default: null },
 }, { timestamps: true });
 
-export default mongoose.model('Arsenal', arsenalSchema);
+export default mongoose.model('Collectible', collectibleSchema);

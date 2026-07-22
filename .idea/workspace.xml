@@ -5,28 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6df4f9d3-921e-4ee7-9db5-6e56bda30da6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/middleware/auth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/models/Agent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/models/AgentArsenal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/models/Arsenal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/models/Battle.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/models/Command.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/models/Level.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/models/Mission.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/routes/agents.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/routes/arsenal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/routes/auth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/routes/battles.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/routes/levels.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/routes/missions.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/seed.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gitquest-ui/api/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/models/Agent.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/Agent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/models/AgentArsenal.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/AgentCollectible.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/models/Arsenal.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/Collectible.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/arsenal.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/collectibles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gitquest-ui/src/components/MissionMap.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/components/MissionMap.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/components/SignInPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/components/SignInPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/components/SignUpPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/components/SignUpPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/components/TrainingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/components/TrainingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gitquest-ui/src/context/ProgressContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gitquest-ui/src/context/ProgressContext.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,61 +49,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.000000290409025" />
-      <entry key="S5" value="1.003567746390881" />
-      <entry key="S10" value="1.084012658618982" />
-      <entry key="S30" value="1.6943946671570158" />
-      <entry key="S60" value="2.1821038468554654" />
-      <entry key="M2" value="2.651123526912248" />
-      <entry key="M5" value="3.7478949771468804" />
-      <entry key="M10" value="4.835996696368797" />
-      <entry key="M15" value="5.396393126715011" />
-      <entry key="M30" value="6.107968732124489" />
-      <entry key="H1" value="7.477342512079436" />
-      <entry key="H2" value="24.31396055198691" />
-      <entry key="H4" value="85.25641122440926" />
-      <entry key="D1" value="283.92243514907955" />
-      <entry key="W1" value="351.2693448990407" />
+      <entry key="MS100" value="1.046066400775705" />
+      <entry key="MS500" value="1.9355614507919356" />
+      <entry key="S2" value="3.797158159037343" />
+      <entry key="S5" value="4.894401294024982" />
+      <entry key="S10" value="5.401190835709801" />
+      <entry key="S30" value="6.277458535747896" />
+      <entry key="S60" value="8.386761220014446" />
+      <entry key="M2" value="12.998647566083607" />
+      <entry key="M5" value="22.770779973040703" />
+      <entry key="M10" value="30.47460810238437" />
+      <entry key="M15" value="34.43316487078515" />
+      <entry key="M30" value="40.11404671391032" />
+      <entry key="H1" value="44.80912902244409" />
+      <entry key="H2" value="60.417187631915375" />
+      <entry key="H4" value="117.22876123322675" />
+      <entry key="D1" value="320.75337383864024" />
+      <entry key="W1" value="393.17298389539866" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="0.0" />
-      <entry key="S10" value="0.0" />
-      <entry key="S30" value="2.960772635496185E-234" />
-      <entry key="S60" value="2.7882821899944462E-117" />
-      <entry key="M2" value="8.944697799046073E-59" />
-      <entry key="M5" value="1.1635443544495387E-23" />
-      <entry key="M10" value="6.094163383348989E-12" />
-      <entry key="M15" value="5.0584256522634867E-8" />
-      <entry key="M30" value="4.508449227744483E-4" />
-      <entry key="H1" value="0.048106323402142964" />
-      <entry key="H2" value="0.5475531398687259" />
-      <entry key="H4" value="1.9247013211195918" />
-      <entry key="D1" value="5.630409561368753" />
-      <entry key="W1" value="6.785189671817291" />
+      <entry key="MS100" value="2.7330085867692425E-21" />
+      <entry key="MS500" value="7.715979503189878E-5" />
+      <entry key="S2" value="0.10400006381832767" />
+      <entry key="S5" value="0.5481620626474082" />
+      <entry key="S10" value="1.023138433084732" />
+      <entry key="S30" value="1.5923795907642175" />
+      <entry key="S60" value="1.8379766660422256" />
+      <entry key="M2" value="2.321061662685598" />
+      <entry key="M5" value="3.7283269926189893" />
+      <entry key="M10" value="4.926214397570309" />
+      <entry key="M15" value="5.4937033021165345" />
+      <entry key="M30" value="6.1767096576268115" />
+      <entry key="H1" value="6.597589939548915" />
+      <entry key="H2" value="7.202144643847325" />
+      <entry key="H4" value="8.579619275477842" />
+      <entry key="D1" value="12.491575973238483" />
+      <entry key="W1" value="13.761643067760534" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.6830201283771977" />
-      <entry key="MS500" value="0.9265880618903709" />
-      <entry key="S2" value="0.981119263791017" />
-      <entry key="S5" value="0.9959633504052723" />
-      <entry key="S10" value="1.0801006971252722" />
-      <entry key="S30" value="1.692823308726048" />
-      <entry key="S60" value="2.181208961054323" />
-      <entry key="M2" value="2.650593869601327" />
-      <entry key="M5" value="3.747522779081448" />
-      <entry key="M10" value="4.835711307152864" />
-      <entry key="M15" value="5.396166575357263" />
-      <entry key="M30" value="6.108281855063648" />
-      <entry key="H1" value="7.525335087525551" />
-      <entry key="H2" value="24.861264071737537" />
-      <entry key="H4" value="87.18073009629526" />
-      <entry key="D1" value="289.5526675258308" />
-      <entry key="W1" value="358.05450424991756" />
+      <entry key="MS100" value="0.962337984169599" />
+      <entry key="MS500" value="1.9036755944162407" />
+      <entry key="S2" value="3.856932656357677" />
+      <entry key="S5" value="5.3562128680684635" />
+      <entry key="S10" value="6.337417637508478" />
+      <entry key="S30" value="7.821349567721893" />
+      <entry key="S60" value="10.194979286110469" />
+      <entry key="M2" value="15.297279604648818" />
+      <entry key="M5" value="26.480405742564624" />
+      <entry key="M10" value="35.38711879180111" />
+      <entry key="M15" value="39.91631076629459" />
+      <entry key="M30" value="46.28458865806443" />
+      <entry key="H1" value="51.403343772632056" />
+      <entry key="H2" value="67.61741898181609" />
+      <entry key="H4" value="125.8071668049471" />
+      <entry key="D1" value="333.24462766190777" />
+      <entry key="W1" value="406.93457542518877" />
     </decayedShown>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
@@ -133,29 +118,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ruby.rubocop.migration.global.runOnSaveToExternalFormatter&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/agent-auth&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/anas/Workspace/Projects/gitquest-main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.web.browsers&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.ruby.rubocop.migration.global.runOnSaveToExternalFormatter": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "feature/backend",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/anas/Workspace/Projects/gitquest-main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.web.browsers",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RubyModuleManagerSettings">
     <option name="blackListedRootsPaths">
       <list>
@@ -181,7 +168,7 @@
       <workItem from="1784432277934" duration="701000" />
       <workItem from="1784604181865" duration="1570000" />
       <workItem from="1784613234556" duration="6078000" />
-      <workItem from="1784644099365" duration="10901000" />
+      <workItem from="1784644099365" duration="12852000" />
     </task>
     <servers />
   </component>

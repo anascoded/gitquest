@@ -9,7 +9,7 @@ import agentRoutes   from './routes/agents.js';
 import levelRoutes   from './routes/levels.js';
 import missionRoutes from './routes/missions.js';
 import battleRoutes  from './routes/battles.js';
-import arsenalRoutes from './routes/arsenal.js';
+import collectibleRoutes from './routes/collectibles.js';
 
 import { fileURLToPath } from 'url'
 import path from 'path'
@@ -35,7 +35,7 @@ app.use('/api/agents',   agentRoutes);
 app.use('/api/levels',   levelRoutes);
 app.use('/api/missions', missionRoutes);
 app.use('/api/battles',  battleRoutes);
-app.use('/api/arsenal',  arsenalRoutes);
+app.use('/api/collectibles',  collectibleRoutes);
 
 // ── Health check ──────────────────────────────────────────────
 app.get('/api/health', (_, res) => res.json({ status: 'online' }));
