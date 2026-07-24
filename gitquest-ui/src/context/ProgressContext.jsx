@@ -1,111 +1,106 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
 const ProgressContext = createContext(null);
-const STORAGE_KEY = 'gitquest-progress';
+const BASE_URL = 'http://localhost:5001/api';
 
-const defaultProgress = {
-  completedLevels: [], // e.g. ['M1-L1', 'M1-L2', 'M3-L3']
-  currentMission: 'M1',
-  currentLevel: 'M1L1',
-};
-
-function loadFromStorage() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? { ...defaultProgress, ...JSON.parse(raw) } : defaultProgress;
-  } catch {
-    return defaultProgress;
-  }
-}
-
+/**
+ *
+ * @param param0
+ * @param param0.children
+ * @returns {React.JSX.Element}
+ * @constructor
+ */
 export function ProgressProvider({ children }) {
-  const [progress, setProgress] = useState(loadFromStorage);
+  const [completedIds, setCompletedIds] = useState(new Set())
+  const [coins, setCoins]               = useState(0)
+  const [loaded, setLoaded]             = useState(false)
 
-  // Auto-save to localStorage whenever progress changes
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-  }, [progress]);
-
-  /**
-   *
-   * @param amount
-   */
-  function addCoins(amount) {
-    setProgress(prev => ({ ...prev, coins: (prev.coins ?? 0) + amount }))
+  // ── Load progress from DB on mount ───────────────────────
+  async function loadProgress() {
+    try {
+      const res  = await fetch(`${BASE_URL}/missions/progress`, { credentials: 'include' })
+      if (!res.ok) return
+      const { completedIds: ids } = await res.json()
+      setCompletedIds(new Set(ids))
+    } catch (err) {
+      console.error('Failed to load progress:', err)
+    } finally {
+      setLoaded(true)
+    }
   }
 
-  /**
-   *
-   * @param levelId
-   */
-  function completeLevel(levelId) {
-    setProgress(prev =>
-      prev.completedLevels.includes(levelId)
-        ? prev
-        : { ...prev, completedLevels: [...prev.completedLevels, levelId] }
-    );
-  }
+  useEffect(() => { loadProgress() }, [])
 
-  function isLevelComplete(levelId) {
-    return progress.completedLevels.includes(levelId);
-  }
+  // ── Mark a mission complete locally + persist to DB ───────
+  const completeLevel = useCallback(async (missionId) => {
+    if (!missionId) return
+    setCompletedIds(prev => new Set([...prev, String(missionId)]))
+    try {
+      await fetch(`${BASE_URL}/missions/progress`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ missionId }),
+      })
+    } catch (err) {
+      console.error('Failed to save progress:', err)
+    }
+  }, [])
 
-  function setCurrent(missionId, levelId) {
-    setProgress(prev => ({ ...prev, currentMission: missionId, currentLevel: levelId }));
-  }
+  const isLevelComplete = useCallback((missionId) => {
+    return completedIds.has(String(missionId))
+  }, [completedIds])
 
-  function setMode(mode) {
-    setProgress(prev => ({ ...prev, mode }));
-  }
+  // Replace addCoins with a DB-backed version
+  const addCoins = useCallback(async (amount) => {
+    // Optimistically update UI
+    setCoins(prev => prev + amount)
+    // DB is updated by the battles/complete endpoint, no extra call needed here
+  }, [])
 
-  function resetProgress() {
-    setProgress(defaultProgress);
-  }
+  // Load initial coin balance from agent data
+  const loadCoins = useCallback((amount) => {
+    setCoins(amount ?? 0)
+  }, [])
 
-  // Export progress as a downloadable .json file
-  function exportProgress() {
-    const blob = new Blob([JSON.stringify(progress, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'gitquest-progress.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+  // ── Reload progress (call after sign-in) ─────────────────
+  const reloadProgress = useCallback(async () => {
+    setLoaded(false)
+    setCompletedIds(new Set())
+    await loadProgress()
+  }, [])
 
-  // Import progress from a user-selected .json file
-  function importProgress(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const parsed = JSON.parse(reader.result);
-          setProgress({ ...defaultProgress, ...parsed });
-          resolve(parsed);
-        } catch (err) {
-          reject(err);
-        }
-      };
-      reader.onerror = reject;
-      reader.readAsText(file);
-    });
-  }
+  // ── Reset on logout ───────────────────────────────────────
+  const resetProgress = useCallback(() => {
+    setCompletedIds(new Set())
+    setCoins(0)
+    setLoaded(false)
+  }, [])
 
   const value = {
-    progress,
+    completedIds,
+    coins,
+    loaded,
     completeLevel,
     isLevelComplete,
     addCoins,
-    setCurrent,
-    setMode,
+    loadCoins,
+    reloadProgress,
     resetProgress,
-    exportProgress,
-    importProgress,
-  };
+    progress: { coins },
+  }
 
-  return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
+  return (
+      <ProgressContext.Provider value={value}>
+        {children}
+      </ProgressContext.Provider>
+  )
 }
 
+/**
+ *
+ * @returns {*}
+ */
 export function useProgress() {
   const ctx = useContext(ProgressContext);
   if (!ctx) throw new Error('useProgress must be used inside a ProgressProvider');

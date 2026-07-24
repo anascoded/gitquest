@@ -1,6 +1,11 @@
-import { useState } from 'react'
-import { signUp } from '../../api/auth.js'
+import {useState} from 'react'
+import {signUp} from '../../api/auth.js'
 
+/**
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function PulseDot() {
   return (
     <span style={{
@@ -11,6 +16,19 @@ function PulseDot() {
   )
 }
 
+/**
+ *
+ * @param param0
+ * @param param0.label
+ * @param param0.type
+ * @param param0.value
+ * @param param0.onChange
+ * @param param0.placeholder
+ * @param param0.error
+ * @param param0.hint
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function InputField({ label, type = 'text', value, onChange, placeholder, error, hint }) {
   const [focused, setFocused] = useState(false)
   return (

@@ -1,28 +1,77 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useProgress } from '../context/ProgressContext'
 
 const BASE_URL = 'http://localhost:5001/api'
 const COINS_PER_MISSION = 10
 
-function TerminalBlock({ lines }) {
+const RARITY_COLORS = {
+    common:    '#4a6fa5',
+    uncommon:  '#00cc66',
+    rare:      '#9a6fcf',
+    legendary: '#e4a020',
+}
+
+// ── Trophy Toast ──────────────────────────────────────────────
+function TrophyToast({ trophies, onDone }) {
+    const [index, setIndex] = useState(0)
+
+    useEffect(() => {
+        if (index >= trophies.length) { onDone(); return }
+        const t = setTimeout(() => setIndex(i => i + 1), 3000)
+        return () => clearTimeout(t)
+    }, [index, trophies.length, onDone])
+
+    if (index >= trophies.length) return null
+    const t   = trophies[index]
+    const col = RARITY_COLORS[t.rarity] || '#4a6fa5'
+
     return (
-        <div style={{ background: '#040810', border: '1px solid #1a2a45', borderRadius: 8, padding: '1rem', fontFamily: 'monospace', fontSize: 13, lineHeight: 1.7 }}>
-            {lines.map((line, i) => {
-                if (line.output) {
-                    return <div key={i} style={{ color: '#4a6fa5', whiteSpace: 'pre', paddingLeft: 16 }}>{line.output}</div>
-                }
-                return (
-                    <div key={i} style={{ display: 'flex', gap: 8 }}>
-                        <span style={{ color: '#00ff8877' }}>{line.prompt}</span>
-                        <span style={{ color: '#c8daf0' }}>{line.cmd}</span>
-                        {line.comment && <span style={{ color: '#2a3a55' }}>{line.comment}</span>}
-                    </div>
-                )
-            })}
+        <div style={{
+            position: 'fixed', top: '4.5rem', left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 300,
+            background: '#0d1526',
+            border: `1px solid ${col}44`,
+            borderLeft: `3px solid ${col}`,
+            borderRadius: 8, padding: '12px 20px',
+            display: 'flex', alignItems: 'center', gap: 12,
+            fontFamily: 'monospace', fontSize: 13,
+            animation: 'fadeInUp 0.3s ease',
+            boxShadow: `0 0 24px ${col}22`,
+            minWidth: 280,
+        }}>
+            <span style={{ fontSize: 24 }}>{t.icon}</span>
+            <div>
+                <div style={{ fontSize: 10, color: col, letterSpacing: '0.1em', marginBottom: 3 }}>
+                    🏆 TROPHY UNLOCKED
+                </div>
+                <div style={{ color: '#c8daf0', fontWeight: 'bold' }}>{t.name}</div>
+                <div style={{ fontSize: 11, color: '#4a6fa5', marginTop: 2 }}>{t.description}</div>
+            </div>
         </div>
     )
 }
 
+// ── Coin Toast ────────────────────────────────────────────────
+function CoinToast({ coins }) {
+    return (
+        <div style={{
+            position: 'fixed', top: '4.5rem', right: '1rem', zIndex: 200,
+            background: '#0d1526', border: '1px solid #ffb70066',
+            borderRadius: 8, padding: '10px 18px',
+            display: 'flex', alignItems: 'center', gap: 8,
+            fontFamily: 'monospace', fontSize: 13,
+            animation: 'fadeInUp 0.3s ease',
+            boxShadow: '0 0 20px rgba(255,183,0,0.15)',
+        }}>
+            <span style={{ fontSize: 16 }}>💰</span>
+            <span style={{ color: '#ffb700', fontWeight: 'bold' }}>+{coins} coins</span>
+            <span style={{ color: '#4a6fa5', fontSize: 11 }}>earned</span>
+        </div>
+    )
+}
+
+// ── Confirm Modal ─────────────────────────────────────────────
 function ConfirmModal({ onStay, onLeave }) {
     return (
         <div style={{
@@ -48,24 +97,10 @@ function ConfirmModal({ onStay, onLeave }) {
                     Are you sure you want to return to HQ?
                 </div>
                 <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
-                    <button
-                        onClick={onStay}
-                        style={{
-                            background: '#003322', border: '1px solid #00ff88',
-                            color: '#00ff88', borderRadius: 8, padding: '10px 24px',
-                            fontFamily: 'monospace', fontSize: 13, cursor: 'pointer',
-                        }}
-                    >
+                    <button onClick={onStay} style={{ background: '#003322', border: '1px solid #00ff88', color: '#00ff88', borderRadius: 8, padding: '10px 24px', fontFamily: 'monospace', fontSize: 13, cursor: 'pointer' }}>
                         ▶ Stay on Mission
                     </button>
-                    <button
-                        onClick={onLeave}
-                        style={{
-                            background: 'transparent', border: '1px solid #e24b4a44',
-                            color: '#e24b4a', borderRadius: 8, padding: '10px 24px',
-                            fontFamily: 'monospace', fontSize: 13, cursor: 'pointer',
-                        }}
-                    >
+                    <button onClick={onLeave} style={{ background: 'transparent', border: '1px solid #e24b4a44', color: '#e24b4a', borderRadius: 8, padding: '10px 24px', fontFamily: 'monospace', fontSize: 13, cursor: 'pointer' }}>
                         ✕ Return to HQ
                     </button>
                 </div>
@@ -74,30 +109,14 @@ function ConfirmModal({ onStay, onLeave }) {
     )
 }
 
-function CoinToast({ coins }) {
-    return (
-        <div style={{
-            position: 'fixed', top: '4.5rem', right: '1rem', zIndex: 200,
-            background: '#0d1526', border: '1px solid #ffb70066',
-            borderRadius: 8, padding: '10px 18px',
-            display: 'flex', alignItems: 'center', gap: 8,
-            fontFamily: 'monospace', fontSize: 13,
-            animation: 'fadeInUp 0.3s ease',
-            boxShadow: '0 0 20px rgba(255,183,0,0.15)',
-        }}>
-            <span style={{ fontSize: 16 }}>💰</span>
-            <span style={{ color: '#ffb700', fontWeight: 'bold' }}>+{coins} coins</span>
-            <span style={{ color: '#4a6fa5', fontSize: 11 }}>earned</span>
-        </div>
-    )
-}
-
-function BattleSection({ battle, command, onComplete }) {
+// ── Battle Section ────────────────────────────────────────────
+function BattleSection({ battle, command, onComplete, onBattleStart }) {
     const [input, setInput]         = useState('')
     const [submitted, setSubmitted] = useState(false)
     const [correct, setCorrect]     = useState(false)
     const [attempts, setAttempts]   = useState(0)
     const [showHint, setShowHint]   = useState(false)
+    const [started, setStarted]     = useState(false)
 
     if (!command) return null
 
@@ -148,7 +167,13 @@ function BattleSection({ battle, command, onComplete }) {
                 <span style={{ color: '#00ff8877', fontFamily: 'monospace', fontSize: 14 }}>$</span>
                 <input
                     value={input}
-                    onChange={e => setInput(e.target.value)}
+                    onChange={e => {
+                        setInput(e.target.value)
+                        if (!started && onBattleStart) {
+                            onBattleStart()
+                            setStarted(true)
+                        }
+                    }}
                     onKeyDown={e => { if (e.key === 'Enter') submitted && !correct ? handleRetry() : handleSubmit() }}
                     disabled={submitted && correct}
                     placeholder="enter git command..."
@@ -185,20 +210,33 @@ function BattleSection({ battle, command, onComplete }) {
     )
 }
 
+// ── Training Page ─────────────────────────────────────────────
 export default function TrainingPage({ missionId, levelId, allMissions = [], onBack, onComplete }) {
-    const { completeLevel, addCoins } = useProgress()
-    const [mission, setMission]       = useState(null)
-    const [command, setCommand]       = useState(null)
-    const [loading, setLoading]       = useState(true)
-    const [error, setError]           = useState(null)
-    const [battleDone, setBattleDone] = useState(false)
-    const [showModal, setShowModal]   = useState(false)
-    const [showToast, setShowToast]   = useState(false)
+    const { completeLevel, addCoins }   = useProgress()
+    const [mission, setMission]         = useState(null)
+    const [command, setCommand]         = useState(null)
+    const [loading, setLoading]         = useState(true)
+    const [error, setError]             = useState(null)
+    const [battleDone, setBattleDone]   = useState(false)
+    const [showModal, setShowModal]     = useState(false)
+    const [showToast, setShowToast]     = useState(false)
     const [levelNumber, setLevelNumber] = useState(null)
+    const [newTrophies, setNewTrophies] = useState([])
+    const [skippedTraining, setSkippedTraining] = useState(false)
 
-    // Reset when mission changes
-    useEffect(() => { setBattleDone(false) }, [missionId])
+    const sessionMissionCountRef = useRef(
+        parseInt(sessionStorage.getItem('sessionMissions') || '0')
+    )
+    const battleStartRef = useRef(null)
 
+    // Reset state when mission changes
+    useEffect(() => {
+        setBattleDone(false)
+        setSkippedTraining(false)
+        battleStartRef.current = null
+    }, [missionId])
+
+    // Load mission data
     useEffect(() => {
         async function load() {
             try {
@@ -207,7 +245,7 @@ export default function TrainingPage({ missionId, levelId, allMissions = [], onB
                 const [cmdRes, allRes, lvlRes] = await Promise.all([
                     fetch(`${BASE_URL}/missions/${missionId}/command`, { credentials: 'include' }),
                     fetch(`${BASE_URL}/missions`, { credentials: 'include' }),
-                    fetch(`${BASE_URL}/levels`, { credentials: 'include' }),
+                    fetch(`${BASE_URL}/levels`,   { credentials: 'include' }),
                 ])
                 if (!cmdRes.ok) throw new Error('Failed to load mission command')
                 const { command: cmd } = await cmdRes.json()
@@ -228,6 +266,81 @@ export default function TrainingPage({ missionId, levelId, allMissions = [], onB
         load()
     }, [missionId, levelId])
 
+    // ── onMissionComplete ───────────────────────────────────────
+    async function handleMissionComplete(attempts, hintUsed) {
+        completeLevel(missionId)
+        if (typeof addCoins === 'function') addCoins(COINS_PER_MISSION)
+        // Save battle record to DB
+        try {
+            await fetch(`${BASE_URL}/battles/complete`, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    missionId,
+                    commandId: command._id,
+                    attempts,
+                    hintUsed,
+                    passed:        true,
+                    xpEarned:      10,
+                    coinsEarned:   COINS_PER_MISSION,
+                }),
+            })
+        } catch (err) {
+            console.error('Failed to save battle:', err)
+        }
+
+        // Update session mission count
+        const newCount = sessionMissionCountRef.current + 1
+        sessionMissionCountRef.current = newCount
+        sessionStorage.setItem('sessionMissions', String(newCount))
+
+        // Calculate battle duration
+        const durationSeconds = battleStartRef.current
+            ? Math.round((Date.now() - battleStartRef.current) / 1000)
+            : null
+
+        // Show coin toast
+        setShowToast(true)
+        setTimeout(() => setShowToast(false), 3000)
+
+        // Evaluate trophies
+        try {
+            const res = await fetch(`${BASE_URL}/trophies/evaluate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    missionId,
+                    attempts,
+                    hintUsed,
+                    skippedTraining,
+                    durationSeconds,
+                    sessionMissionCount: newCount,
+                }),
+            })
+            const data = await res.json()
+            if (data.newlyUnlocked?.length > 0) {
+                setNewTrophies(data.newlyUnlocked)
+            }
+        } catch (err) {
+            console.error('Trophy evaluation failed:', err)
+        }
+
+        // Advance to next mission
+        setBattleDone(true)
+        const sorted     = [...allMissions].sort((a, b) => a.missionNumber - b.missionNumber)
+        const currentIdx = sorted.findIndex(m => m._id === missionId)
+        const next       = sorted[currentIdx + 1]
+
+        setTimeout(() => {
+            setBattleDone(false)
+            if (next) onComplete(next._id, levelId, allMissions)
+            else      onComplete(null, null, null)
+        }, 2000)
+    }
+
+    // ── Loading / Error states ──────────────────────────────────
     if (loading) {
         return (
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', alignItems: 'center', justifyContent: 'center', color: '#4a6fa5', fontFamily: 'monospace' }}>
@@ -248,11 +361,20 @@ export default function TrainingPage({ missionId, levelId, allMissions = [], onB
         )
     }
 
+    // ── Render ──────────────────────────────────────────────────
     return (
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
 
             {/* Coin toast */}
             {showToast && <CoinToast coins={COINS_PER_MISSION} />}
+
+            {/* Trophy toast queue */}
+            {newTrophies.length > 0 && (
+                <TrophyToast
+                    trophies={newTrophies}
+                    onDone={() => setNewTrophies([])}
+                />
+            )}
 
             {/* Confirm modal */}
             {showModal && (
@@ -292,8 +414,20 @@ export default function TrainingPage({ missionId, levelId, allMissions = [], onB
           </span>
                 </div>
 
+                {/* Home button */}
                 <button
-                    onClick={() => setTimeout(() => document.getElementById('battle-section')?.scrollIntoView({ behavior: 'smooth' }), 50)}
+                    onClick={() => setShowModal(true)}
+                    style={{ fontSize: 11, color: '#00ff88', background: '#003322', border: '1px solid #00ff8844', borderRadius: 6, padding: '5px 14px', cursor: 'pointer', fontFamily: 'monospace', letterSpacing: '0.06em' }}
+                >
+                    ⌂ Home
+                </button>
+
+                {/* Skip to battle */}
+                <button
+                    onClick={() => {
+                        setSkippedTraining(true)
+                        setTimeout(() => document.getElementById('battle-section')?.scrollIntoView({ behavior: 'smooth' }), 50)
+                    }}
                     style={{ fontSize: 11, color: '#4a6fa5', background: 'none', border: '1px solid #1a2a45', borderRadius: 6, padding: '5px 12px', cursor: 'pointer', fontFamily: 'monospace' }}
                 >
                     Skip to the Battle ↓
@@ -345,31 +479,8 @@ export default function TrainingPage({ missionId, levelId, allMissions = [], onB
                     <BattleSection
                         battle={mission}
                         command={command}
-                        onComplete={(attempts, hintUsed) => {
-                            completeLevel(missionId)
-
-                            // Award coins
-                            if (typeof addCoins === 'function') addCoins(COINS_PER_MISSION)
-
-                            // Show toast
-                            setShowToast(true)
-                            setTimeout(() => setShowToast(false), 3000)
-
-                            setBattleDone(true)
-
-                            const sorted     = [...allMissions].sort((a, b) => a.missionNumber - b.missionNumber)
-                            const currentIdx = sorted.findIndex(m => m._id === missionId)
-                            const next       = sorted[currentIdx + 1]
-
-                            setTimeout(() => {
-                                setBattleDone(false)
-                                if (next) {
-                                    onComplete(next._id, levelId, allMissions)
-                                } else {
-                                    onComplete(null, null, null)
-                                }
-                            }, 2000)
-                        }}
+                        onBattleStart={() => { battleStartRef.current = Date.now() }}
+                        onComplete={handleMissionComplete}
                     />
                 )}
 

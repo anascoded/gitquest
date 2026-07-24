@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import WelcomeScreen from './components/WelcomeScreen'
 import MissionMap from './components/MissionMap'
@@ -16,9 +16,14 @@ const GRID_STYLE = {
 }
 
 const AUDIO_URL = 'http://localhost:5001/audio/Trent Reznor - Intriguing Possibilities.wav'
+const BASE_URL  = 'http://localhost:5001/api'
 
+/**
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function AppInner() {
-    const { progress }                  = useProgress()
+    const { progress, reloadProgress, resetProgress, loadCoins } = useProgress()
     const [screen, setScreen]           = useState('signin')
     const [activeLevel, setActiveLevel] = useState(null)
     const [agent, setAgent]             = useState(null)
@@ -27,14 +32,14 @@ function AppInner() {
 
     // Initialize audio once
     useEffect(() => {
-        const audio       = new Audio(AUDIO_URL)
-        audio.loop        = true
-        audio.volume      = 0.5
-        audioRef.current  = audio
+        const audio      = new Audio(AUDIO_URL)
+        audio.loop       = true
+        audio.volume     = 0.5
+        audioRef.current = audio
         return () => { audio.pause(); audio.src = '' }
     }, [])
 
-    // Play only on map screen, respect soundOn toggle
+    // Play on map/training/arsenal/trophy, pause on auth + welcome
     useEffect(() => {
         const audio = audioRef.current
         if (!audio) return
@@ -46,9 +51,47 @@ function AppInner() {
         }
     }, [screen, soundOn])
 
-    function handleSignIn(agentData) { setAgent(agentData); setScreen('welcome') }
-    function handleSignUp(agentData) { setAgent(agentData); setScreen('welcome') }
+    /**
+     * @param {object} agentData
+     */
+    async function handleSignIn(agentData) {
+        setAgent(agentData)
+        loadCoins(agentData.coins ?? 0)
+        await reloadProgress()
+        setScreen('welcome')
+    }
 
+    /**
+     * @param {object} agentData
+     */
+    async function handleSignUp(agentData) {
+        setAgent(agentData)
+        loadCoins(agentData.coins ?? 0)
+        await reloadProgress()
+        setScreen('welcome')
+    }
+
+    /**
+     * Called by WelcomeScreen after its 2-second delay
+     */
+    async function handleLogout() {
+        try {
+            await fetch(`${BASE_URL}/auth/signout`, {
+                method: 'POST',
+                credentials: 'include',
+            })
+        } catch (err) {
+            console.error('Logout failed:', err)
+        }
+        resetProgress()
+        sessionStorage.removeItem('sessionMissions')
+        setAgent(null)
+        setActiveLevel(null)
+        setScreen('signin')
+    }
+
+    /**
+     */
     function toggleSound() {
         setSoundOn(prev => !prev)
     }
@@ -57,7 +100,7 @@ function AppInner() {
         <div style={{ background: '#0a0e1a', minHeight: '100vh', width: '100%', position: 'relative', fontFamily: 'monospace' }}>
             <div style={{ position: 'fixed', inset: 0, ...GRID_STYLE, pointerEvents: 'none' }} />
 
-            {/* Sound button */}
+            {/* Sound button — hidden on auth + welcome */}
             {screen !== 'signin' && screen !== 'signup' && screen !== 'welcome' && (
                 <button
                     onClick={toggleSound}
@@ -78,7 +121,7 @@ function AppInner() {
 
             {screen === 'signin'  && <SignInPage  onSignIn={handleSignIn}  onGoToSignUp={() => setScreen('signup')} />}
             {screen === 'signup'  && <SignUpPage  onSignUp={handleSignUp}  onGoToSignIn={() => setScreen('signin')} />}
-            {screen === 'welcome' && <WelcomeScreen onSelect={() => setScreen('map')} />}
+            {screen === 'welcome' && <WelcomeScreen onSelect={() => setScreen('map')} onLogout={handleLogout} />}
 
             {screen === 'map' && (
                 <MissionMap
@@ -115,6 +158,10 @@ function AppInner() {
     )
 }
 
+/**
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function App() {
     return (
         <ProgressProvider>

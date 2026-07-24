@@ -1,5 +1,11 @@
 const BASE_URL = 'http://localhost:5001/api'
 
+/**
+ *
+ * @param email
+ * @param password
+ * @returns {Promise<*>}
+ */
 export async function signIn(email, password) {
     const res = await fetch(`${BASE_URL}/auth/signin`, {
         method: 'POST',
@@ -12,6 +18,13 @@ export async function signIn(email, password) {
     return data.agent
 }
 
+/**
+ *
+ * @param codename
+ * @param email
+ * @param password
+ * @returns {Promise<*>}
+ */
 export async function signUp(codename, email, password) {
     const res = await fetch(`${BASE_URL}/auth/signup`, {
         method: 'POST',
@@ -24,6 +37,10 @@ export async function signUp(codename, email, password) {
     return data.agent
 }
 
+/**
+ *
+ * @returns {Promise<void>}
+ */
 export async function signOut() {
     await fetch(`${BASE_URL}/auth/signout`, {
         method: 'POST',
@@ -31,6 +48,10 @@ export async function signOut() {
     })
 }
 
+/**
+ *
+ * @returns {Promise<*|null>}
+ */
 export async function getMe() {
     const res = await fetch(`${BASE_URL}/auth/me`, {
         credentials: 'include',

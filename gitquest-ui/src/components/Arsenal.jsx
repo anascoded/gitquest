@@ -59,6 +59,14 @@ const ITEMS = [
   },
 ]
 
+/**
+ *
+ * @param param0
+ * @param param0.children
+ * @param param0.color
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function Tag({ children, color }) {
   const colors = {
     green: { bg: '#0d1f15', border: '#00ff8833', text: '#00cc66' },

@@ -4,12 +4,15 @@ import cookieParser  from 'cookie-parser';
 import cors          from 'cors';
 import dotenv        from 'dotenv';
 
-import authRoutes    from './routes/auth.js';
 import agentRoutes   from './routes/agents.js';
-import levelRoutes   from './routes/levels.js';
-import missionRoutes from './routes/missions.js';
+import authRoutes    from './routes/auth.js';
 import battleRoutes  from './routes/battles.js';
 import collectibleRoutes from './routes/collectibles.js';
+import levelRoutes   from './routes/levels.js';
+import missionRoutes from './routes/missions.js';
+import statsRoutes  from './routes/stats.js';
+import trophyRoutes from './routes/trophies.js';
+
 
 import { fileURLToPath } from 'url'
 import path from 'path'
@@ -36,6 +39,8 @@ app.use('/api/levels',   levelRoutes);
 app.use('/api/missions', missionRoutes);
 app.use('/api/battles',  battleRoutes);
 app.use('/api/collectibles',  collectibleRoutes);
+app.use('/api/stats',    statsRoutes);
+app.use('/api/trophies', trophyRoutes);
 
 // ── Health check ──────────────────────────────────────────────
 app.get('/api/health', (_, res) => res.json({ status: 'online' }));

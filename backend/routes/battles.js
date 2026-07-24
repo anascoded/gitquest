@@ -5,39 +5,47 @@ import Agent       from '../models/Agent.js';
 
 const router = express.Router();
 
-// POST /api/battles — start a battle
-router.post('/', requireAuth, async (req, res) => {
+// POST /api/battles/complete — record a completed battle
+router.post('/complete', requireAuth, async (req, res) => {
     try {
-        const { missionId, commandId } = req.body;
-        const battle = await Battle.create({
-            agentId: req.agentId, missionId, commandId
-        });
-        res.status(201).json({ battle });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// PATCH /api/battles/:id/complete — complete a battle
-router.patch('/:id/complete', requireAuth, async (req, res) => {
-    try {
-        const { attempts, hintUsed, passed, livesRemaining, xpEarned, coinsEarned } = req.body;
+        const {
+            missionId,
+            commandId,
+            attempts,
+            hintUsed,
+            passed,
+            xpEarned,
+            coinsEarned,
+        } = req.body;
 
         const perfectPass = attempts === 1 && !hintUsed && passed;
 
-        const battle = await Battle.findByIdAndUpdate(req.params.id, {
-            attempts, hintUsed, passed, perfectPass,
-            livesRemaining, xpEarned, coinsEarned,
-            completedAt: new Date(),
-        }, { new: true });
+        // Upsert — one battle record per agent per mission
+        const battle = await Battle.findOneAndUpdate(
+            { agentId: req.agentId, missionId },
+            {
+                agentId: req.agentId,
+                missionId,
+                commandId,
+                attempts,
+                hintUsed,
+                passed,
+                perfectPass,
+                xpEarned,
+                coinsEarned,
+                completedAt: new Date(),
+            },
+            { upsert: true, new: true }
+        );
 
+        // Update agent totals
         if (passed) {
             await Agent.findByIdAndUpdate(req.agentId, {
                 $inc: {
-                    totalMissions:   1,
-                    totalXP:         xpEarned,
-                    coins:           coinsEarned,
-                    perfectAttempts: perfectPass ? 1 : 0,
+                    totalXP:    xpEarned   ?? 0,
+                    coins:      coinsEarned ?? 0,
+                    totalMissions: 1,
+                    ...(perfectPass ? { perfectAttempts: 1 } : {}),
                 }
             });
         }
@@ -48,12 +56,12 @@ router.patch('/:id/complete', requireAuth, async (req, res) => {
     }
 });
 
-// GET /api/battles/history — agent's battle history
+// GET /api/battles/history — agent battle history
 router.get('/history', requireAuth, async (req, res) => {
     try {
         const battles = await Battle.find({ agentId: req.agentId })
             .populate('missionId', 'title')
-            .sort({ startedAt: -1 })
+            .sort({ completedAt: -1 })
             .limit(20);
         res.json({ battles });
     } catch (err) {

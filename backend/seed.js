@@ -7,7 +7,6 @@ import Command  from './models/Command.js';
 dotenv.config();
 
 // ── Level data ────────────────────────────────────────────────
-
 const levels = [
     { levelNumber: 1, title: 'Recruit Training',  subtitle: 'Master the basics before field clearance is granted.', difficulty: 'beginner',     order: 1, xpReward: 100, coinReward: 50  },
     { levelNumber: 2, title: 'Deep Infiltration', subtitle: 'Coordinate threads. Correct mistakes under fire.',      difficulty: 'intermediate', order: 2, xpReward: 200, coinReward: 100 },
@@ -16,7 +15,6 @@ const levels = [
 
 // ── Mission + Command data ────────────────────────────────────
 // Format: { mission: {...}, command: {...} }
-
 const missionData = [
 
     // ── LEVEL 1 ────────────────────────────────────────────────
