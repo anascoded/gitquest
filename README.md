@@ -3,7 +3,7 @@
 
 GitQuest is an interactive web application that teaches Git through story-driven missions. Players take on the role of a cyber agent fighting a hacker group called **Shadow Breach**, learning real Git commands through hands-on field scenarios, progressive levels, a live leaderboard, trophies, and a coin-based reward system.
 
-🌐 **Live at [gitquestgame.com](https://gitquestgame.com)**
+**Live at [gitquestgame.com](https://gitquestgame.com)**
 
 ---
 
