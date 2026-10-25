@@ -1,4 +1,4 @@
-# GitQuest 🎮
+# GitQuest
 ### Operation Shadow Breach — Learn Git Through Immersive Hacker Missions
 
 GitQuest is an interactive web application that teaches Git through story-driven missions. Players take on the role of a cyber agent fighting a hacker group called **Shadow Breach**, learning real Git commands through hands-on field scenarios, progressive levels, a live leaderboard, trophies, and a coin-based reward system.
@@ -41,22 +41,22 @@ Progress, coins, XP, trophies, and streaks are all persisted in MongoDB so agent
 
 ## Features
 
-- 🎯 **30 Missions** across 3 levels — Beginner, Intermediate, Advanced
-- 🔐 **Agent Authentication** — Sign up / sign in with email and password, JWT via HTTP-only cookies
-- 🔄 **Session Persistence** — Automatically restores session on page refresh without re-login
-- 📈 **Live Progress Tracking** — Mission completion saved to MongoDB per agent, synced across devices
-- 💰 **Coin System** — Earn 10 coins per completed mission, spend them in the Collectibles store
-- ⚡ **XP System** — Earn XP per mission, tracked live in the topbar and leaderboard
-- 🔥 **Daily Streak** — Resets to 0 if you miss a day, tracked on every sign-in
-- 🏆 **20 Trophies** — Unlocked by hitting milestones (speed, streaks, perfect attempts, level completion, etc.)
-- 🎖️ **Agent Dossier** — Live stats: missions complete, battles won, perfect attempts, hints used, coins earned
-- 🗺️ **Mission Map** — Visual level map with lock/unlock progression
-- 🔒 **Mission Locking** — New Recruits must complete missions in order; completed missions are freely revisitable
-- 🎵 **Background Music** — Plays across map and mission screens, toggle on/off
-- 🛒 **Collectibles** — 18 tools, boosts, and cosmetics purchasable with coins (consumable — use to unequip and repurchase)
-- 🏅 **Trophy Room** — All 20 trophies with rarity tiers (Common, Uncommon, Rare, Legendary) and agent dossier
-- 📊 **Leaderboard** — Top 10 agents ranked by XP: All Time tab and Level tab (reflects agent's current level)
-- 🚪 **Logout** — Clean session teardown with 2-second animated transition
+- **30 Missions** across 3 levels — Beginner, Intermediate, Advanced
+- **Agent Authentication** — Sign up / sign in with email and password, JWT via HTTP-only cookies
+- **Session Persistence** — Automatically restores session on page refresh without re-login
+- **Live Progress Tracking** — Mission completion saved to MongoDB per agent, synced across devices
+- **Coin System** — Earn 10 coins per completed mission, spend them in the Collectibles store
+- **XP System** — Earn XP per mission, tracked live in the top bar and leaderboard
+- **Daily Streak** — Resets to 0 if you miss a day, tracked on every sign-in
+- **20 Trophies** — Unlocked by hitting milestones (speed, streaks, perfect attempts, level completion, etc.)
+- **Agent Dossier** — Live stats: missions complete, battles won, perfect attempts, hints used, coins earned
+- **Mission Map** — Visual level map with lock/unlock progression
+- **Mission Locking** — New Recruits must complete missions in order; completed missions are freely revisitable
+- **Background Music** — Plays across map and mission screens; toggle on/off
+- **Collectibles** — 18 tools, boosts, and cosmetics purchasable with coins (consumable — use to unequip and repurchase)
+- **Trophy Room** — All 20 trophies with rarity tiers (Common, Uncommon, Rare, Legendary) and agent dossier
+- **Leaderboard** — Top 10 agents ranked by XP: All Time tab and Level tab (reflects agent's current level)
+- **Logout** — Clean session teardown with 2-second animated transition
 
 ---
 
